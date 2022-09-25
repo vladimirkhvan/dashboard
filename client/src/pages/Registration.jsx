@@ -1,10 +1,12 @@
 import React from 'react';
 import { RegistrationForm } from '../components/RegistrationForm';
 
+import { Authentication } from '../layoutPages/Authentication';
+
 export const Registration = () => {
     return (
-        <div>
-            <RegistrationForm nextPage="/login" />
-        </div>
+        <Authentication>
+            <RegistrationForm/>
+        </Authentication>
     );
 };
