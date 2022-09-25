@@ -1,4 +1,4 @@
-@import './variables';
+@import './_variables.scss';
 
 * {
     padding: 0;
@@ -7,6 +7,14 @@
     outline: none;
     font-family: $main-font;
     box-sizing: border-box;
+}
+
+html,
+body,
+#app,
+#app > div {
+    height: 100%;
+    min-height:100vh;
 }
 
 html {
