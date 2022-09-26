@@ -6,7 +6,8 @@ import style from './LoginForm.module.scss';
 
 import clearIcon from '../../assets/images/clear.svg';
 
-// TODO: place clearfield and handle change methods in utils
+import { clearField } from '../../utils/clearField';
+import { handleChange } from '../../utils/handleChange';
 
 export const LoginForm = () => {
     const [userInfo, setUserInfo] = React.useState({
@@ -15,59 +16,58 @@ export const LoginForm = () => {
     });
 
     const [isLoginError, setIsLoginError] = React.useState(false);
-    
+
     const navigate = useNavigate();
-
-    const handleChange = (e) => {
-        setIsLoginError(false);
-        setUserInfo((prevUserInfo) => ({ ...prevUserInfo, [e.target.name]: e.target.value }));
-    };
-
-    const clearField = (fieldName) => {
-        setUserInfo((prevUserInfo) => ({ ...prevUserInfo, [fieldName]: '' }));
-    };
 
     const handleLogin = async (e) => {
         e.preventDefault();
 
         try {
-            const { data: isExist } = await axios.get(
-                `http://localhost:8800/users/${userInfo.email}/${userInfo.password}`,
-            );
-            isExist ? navigate('/') : setIsLoginError(true);;
+            const { data } = await axios.post(`http://localhost:8800/users/login`, {
+                email: userInfo.email,
+                password: userInfo.password,
+            });
+            window.localStorage.setItem('token', data.token);
+            window.localStorage.setItem('id', data.id);
+            window.localStorage.setItem('username', data.username);
+            navigate('/');
         } catch (error) {
+            setIsLoginError(true)
             console.log(error);
         }
     };
 
     return (
         <div>
+            <h2>Sign in</h2>
             <form onSubmit={handleLogin} className={style.loginForm}>
                 <div>
                     <input
                         type="email"
                         name="email"
-                        onChange={handleChange}
+                        onChange={(e) => handleChange(e, setUserInfo)}
                         value={userInfo.email}
                         placeholder="email"
                         required
                     />
-                    <img src={clearIcon} alt="clear" onClick={() => clearField('email')} />
+                    <img src={clearIcon} alt="clear" onClick={() => clearField('email', setUserInfo)} />
                 </div>
                 <div>
                     <input
                         type="password"
                         name="password"
-                        onChange={handleChange}
+                        onChange={(e) => handleChange(e, setUserInfo)}
                         value={userInfo.password}
                         placeholder="password"
                         autoComplete="current-password"
                         required
                     />
-                    <img src={clearIcon} alt="clear" onClick={() => clearField('password')} />
+                    <img src={clearIcon} alt="clear" onClick={() => clearField('password', setUserInfo)} />
                 </div>
 
-                <p className={`${style.errorMessage} ` + (isLoginError ? '' : `${style.hide}`)}>Email or password are not matching. Try again</p>
+                <p className={`${style.errorMessage} ` + (isLoginError ? '' : `${style.hide}`)}>
+                    Email or password are not matching. Try again
+                </p>
 
                 <button type="submit">Login</button>
             </form>
