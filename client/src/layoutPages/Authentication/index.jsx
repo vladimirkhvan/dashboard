@@ -5,13 +5,12 @@ import style from './Authentication.module.scss'
 
 import character from '../../assets/images/character.png'
 
+import { Header } from '../../components/Header';
+
 export const Authentication = (props) => {
     return (
         <div className={style.authentication}>
-            <header>
-                <Link to='/login' className={style.login}>Sign In</Link>
-                <Link to='/registration' className={style.register}>Register</Link>
-            </header>
+            <Header isAuthorized={false}/>
             <main>
                 <div className={style.infoBlock}>
                     <h1>Sign In to <br/>Manage Dashboard</h1>
