@@ -6,6 +6,9 @@ import style from './RegistrationForm.module.scss';
 
 import clearIcon from '../../assets/images/clear.svg';
 
+import { clearField } from '../../utils/clearField';
+import { handleChange } from '../../utils/handleChange';
+
 export const RegistrationForm = () => {
     const [userInfo, setUserInfo] = React.useState({
         username: '',
@@ -19,15 +22,6 @@ export const RegistrationForm = () => {
     const hideStyle = userInfo.password === userInfo.confirmationPassword ? `${style.hide}` : '';
 
     const navigate = useNavigate();
-
-    const handleChange = (e) => {
-        setIsExist(false);
-        setUserInfo((prevUserInfo) => ({ ...prevUserInfo, [e.target.name]: e.target.value }));
-    };
-
-    const clearField = (fieldName) => {
-        setUserInfo((prevUserInfo) => ({ ...prevUserInfo, [fieldName]: '' }));
-    };
 
     const handleRegister = async (e) => {
         e.preventDefault();
@@ -44,46 +38,47 @@ export const RegistrationForm = () => {
 
     return (
         <div>
+            <h2>Registration</h2>
             <form onSubmit={handleRegister} className={style.registrationForm}>
                 <div className={style.username}>
                     <input
                         type="text"
                         name="username"
-                        onChange={handleChange}
+                        onChange={(e) => handleChange(e, setUserInfo)}
                         value={userInfo.username}
                         placeholder="Enter name"
                         required
                     />
-                    <img src={clearIcon} alt="clear" onClick={() => clearField('username')} />
+                    <img src={clearIcon} alt="clear" onClick={() => clearField('username', setUserInfo)} />
                 </div>
                 <div className={style.email}>
                     <input
                         type="email"
                         name="email"
-                        onChange={handleChange}
+                        onChange={(e) => handleChange(e, setUserInfo)}
                         value={userInfo.email}
                         placeholder="Enter email"
                         required
                     />
-                    <img src={clearIcon} alt="clear" onClick={() => clearField('email')} />
+                    <img src={clearIcon} alt="clear" onClick={() => clearField('email', setUserInfo)} />
                 </div>
                 <div className={style.password}>
                     <input
                         type="password"
                         name="password"
-                        onChange={handleChange}
+                        onChange={(e) => handleChange(e, setUserInfo)}
                         value={userInfo.password}
                         placeholder="Enter password"
                         autoComplete="current-password"
                         required
                     />
-                    <img src={clearIcon} alt="clear" onClick={() => clearField('password')} />
+                    <img src={clearIcon} alt="clear" onClick={() => clearField('password', setUserInfo)} />
                 </div>
                 <div className={style.password}>
                     <input
                         type="password"
                         name="confirmationPassword"
-                        onChange={handleChange}
+                        onChange={(e) => handleChange(e, setUserInfo)}
                         value={userInfo.confirmationPassword}
                         placeholder="Confirm password"
                         autoComplete="current-password"
@@ -92,7 +87,7 @@ export const RegistrationForm = () => {
                     <img
                         src={clearIcon}
                         alt="clear"
-                        onClick={() => clearField('confirmationPassword')}
+                        onClick={() => clearField('confirmationPassword', setUserInfo)}
                     />
                 </div>
                 <p className={`${style.errorMessage} ` + hideStyle}>Passwords are not matching</p>
